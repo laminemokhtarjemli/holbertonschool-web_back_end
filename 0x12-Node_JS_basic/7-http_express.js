@@ -1,17 +1,13 @@
 const express = require('express');
 const fs = require('fs');
 
+const app = express();
 const port = 1245;
 
-// Create an Express app
-const app = express();
-
-// Set up a route for the root endpoint '/'
 app.get('/', (req, res) => {
   res.send('Hello Holberton School!');
 });
 
-// Set up a route for the '/students' endpoint
 app.get('/students', (req, res) => {
   const database = process.argv[2];
   fs.readFile(database, 'utf8', (err, data) => {
@@ -22,10 +18,9 @@ app.get('/students', (req, res) => {
   });
 });
 
-// Start the HTTP server
 app.listen(port, () => {
   console.log(`HTTP server listening on port ${port}`);
 });
 
-// Export the app variable
 module.exports = app;
+
