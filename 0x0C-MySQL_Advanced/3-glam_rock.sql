@@ -1,4 +1,5 @@
-SELECT band_name, (split - formed) AS lifespan
-FROM metal_bands
-WHERE main_style = 'Glam rock'
-ORDER BY lifespan DESC;
+SELECT DISTINCT `band_name`,
+                IFNULL(`split`, 2020) - `formed` as `lifespan`
+FROM `metal_bands`
+WHERE FIND_IN_SET('Glam rock', style)
+ORDER BY `lifespan` DESC;
