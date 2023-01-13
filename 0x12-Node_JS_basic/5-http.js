@@ -1,33 +1,36 @@
-const http = require('http');
-const fs = require('fs');
-const csv = require('csv-parser');
+const express = require('express');
+const countStudents = require('./3-read_file_async');
 
-const app = http.createServer((req, res) => {
-    res.setHeader('Content-Type', 'text/plain');
-    if (req.url === '/') {
-        res.end('Hello Holberton School!');
-    } else if (req.url === '/students') {
-        let csvFile = process.argv[2];
-        let data = {};
-        data["CS"] = [];
-        data["SWE"] = [];
-        fs.createReadStream(csvFile)
-            .pipe(csv())
-            .on('data', (row) => {
-                if(row.Department === "CS"){
-                    data["CS"].push(row.Name);
-                }else if(row.Department === "SWE"){
-                    data["SWE"].push(row.Name);
-                }
-            })
-            .on('end', () => {
-                res.end(`This is the list of our students\nNumber of students: ${data["CS"].length + data["SWE"].length}\nNumber of students in CS: ${data["CS"].length}. List: ${data["CS"].join(', ')}\nNumber of students in SWE: ${data["SWE"].length}. List: ${data["SWE"].join(', ')}`);
-            });
-    } else {
-        res.end('404 - Not Found');
+const app = express();
+const port = 1245;
+
+app.get('/students', async (req, res) => {
+  try {
+    const { students, fields } = await countStudents(process.argv[2]);
+    let response = `Number of students: ${students.length}\n`;
+    for (const student of students) {
+      fields.add(student.field);
     }
+
+    for (const field of fields) {
+      const data = students
+        .filter((s) => s.field === field)
+        .map((s) => s.firstname);
+
+      response += `Number of students in ${field}: ${data.length}. List: ${data.join(', ')}\n`;
+    }
+    res.send(response);
+  } catch (err) {
+    res.send('Error: Cannot load the database');
+  }
 });
 
-app.listen(1245);
-console.log('Server listening on port 1245');
+app.get('/', (req, res) => {
+  res.send('Hello Holberton School!');
+});
+
+app.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
+
 module.exports = app;
