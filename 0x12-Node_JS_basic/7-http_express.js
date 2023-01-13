@@ -1,27 +1,28 @@
-const express = require('express');
-const fs = require('fs');
+const http = require('http');
+const countStudents = require('./3-read_file_async');
 
-const app = express();
+const args = process.argv.slice(2);
+const DATABASE = args[0];
 const port = 1245;
 
-app.get('/', (req, res) => {
-res.send('Hello Holberton School!');
-});
+const requestListener = async (req, res) => {
+  switch (req.url) {
+    case '/students':
+      res.writeHead(200);
+      try {
+        const students = await countStudents(DATABASE);
+        res.write(`This is the list of our students\n`);
+        res.write(students.join('\n'));
+      } catch (error) {
+        res.write(`Error: ${error.message}`);
+      }
+      res.end();
+      break;
+    default:
+      res.writeHead(200);
+      res.end('Hello Holberton School!');
+  }
+};
 
-app.get('/students', (req, res) => {
-fs.readFile(process.argv[2], 'utf8', (err, data) => {
-if (err) {
-res.send('Error: Cannot load the database');
-return;
-}
-let students = data.split('\n');
-students = students.filter(student => student !== '');
-res.send(This is the list of our students: ${students.join(', ')});
-});
-});
-
-app.listen(port, () => {
-console.log(HTTP server listening on port ${port});
-});
-
-module.exports = app;
+const server = http.createServer(requestListener);
+server.listen(port, () => { console.log(`Listening on port ${port}`); });
