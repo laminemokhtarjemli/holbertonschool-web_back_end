@@ -1,14 +1,15 @@
 CREATE PROCEDURE AddBonus (IN user_id INT, IN project_name VARCHAR(255), IN score INT)
+AS
 BEGIN
     DECLARE project_id INT;
-    
+    -- check if project already exists
     SELECT id INTO project_id FROM projects WHERE name = project_name;
-    
-
-    IF project_id IS NULL THEN
+    -- if project does not exist, insert it
+    IF project_id IS NULL 
+    BEGIN
         INSERT INTO projects (name) VALUES (project_name);
-        SET project_id = LAST_INSERT_ID();
-    END IF;
-    
+        SELECT SCOPE_IDENTITY() INTO project_id;
+    END
+    -- insert the correction
     INSERT INTO corrections (user_id, project_id, score) VALUES (user_id, project_id, score);
-END;
+END
