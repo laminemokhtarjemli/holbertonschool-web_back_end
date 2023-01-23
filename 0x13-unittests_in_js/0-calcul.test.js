@@ -1,6 +1,6 @@
 const { calculateNumber } = require('./0-calcul');
 const assert = require('assert');
-require("@babel/register");
+
 
 describe('calculateNumber', () => {
     it('should return the rounded sum of a and b', () => {
