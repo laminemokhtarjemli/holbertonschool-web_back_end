@@ -1,19 +1,21 @@
-const calculateNumber = require("./0-calcul.js");
+const { calculateNumber } = require('./0-calcul');
 const assert = require('assert');
+require("@babel/register");
 
 describe('calculateNumber', () => {
-    it('should round the input numbers and return their sum', () => {
-        assert.strictEqual(calculateNumber(3.4, 5.6), 9);
-        assert.strictEqual(calculateNumber(6.5, 8.5), 15);
+    it('should return the rounded sum of a and b', () => {
+        assert.equal(calculateNumber(2.3, 4.6), 7);
+        assert.equal(calculateNumber(3.5, 2.9), 6);
+        assert.equal(calculateNumber(1.6, 5.4), 7);
     });
-
-    it('should work correctly for negative numbers', () => {
-        assert.strictEqual(calculateNumber(-3.4, -5.6), -9);
-        assert.strictEqual(calculateNumber(-6.5, -8.5), -15);
+    it('should return the rounded sum of a and b even if a is negative', () => {
+        assert.equal(calculateNumber(-2.3, 4.6), 2);
+        assert.equal(calculateNumber(-3.5, 2.9), 0);
+        assert.equal(calculateNumber(-1.6, 5.4), 4);
     });
-
-    it('should work correctly for numbers with decimal places', () => {
-        assert.strictEqual(calculateNumber(3.14, 2.72), 6);
-        assert.strictEqual(calculateNumber(2.99, 3.01), 6);
+    it('should return the rounded sum of a and b even if a is 0', () => {
+        assert.equal(calculateNumber(0, 4.6), 5);
+        assert.equal(calculateNumber(0, -2.9), -3);
+        assert.equal(calculateNumber(0, 5.4), 5);
     });
 });
