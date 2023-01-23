@@ -1,7 +1,9 @@
-const calculateNumber = (a, b) => {
-if (!Number.isFinite(a) || !Number.isFinite(b)) {
-throw new TypeError();
+function calculateNumber(a, b) {
+    const roundedA = Math.round(a);
+    const roundedB = Math.round(b);
+    return roundedA + roundedB;
 }
-return Math.round(a) + Math.round(b);
+
+module.exports = {
+    calculateNumber
 }
-module.exports = calculateNumber;
