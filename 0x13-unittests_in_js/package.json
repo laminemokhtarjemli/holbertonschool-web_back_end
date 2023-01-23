@@ -4,15 +4,19 @@
 	"description": " ",
 	"main": "index.js",
 	"scripts": {
-		"test": "./node_modules/mocha/bin/mocha --exit"
+		"test": "mocha --require @babel/register --require @babel/polyfill --require ignore-styles --timeout 10000 --exit"
 	},
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@babel/polyfill": "^7.12.1",
+		"@babel/register": "^7.18.9",
+		"assert": "^2.0.0",
+		"ignore-styles": "^5.0.1",
 		"mocha": "^10.2.0"
 	},
 	"devDependencies": {
-		"chai": "^4.2.0",
+		"chai": "^4.3.7",
 		"sinon": "^9.2.3"
 	}
 }
